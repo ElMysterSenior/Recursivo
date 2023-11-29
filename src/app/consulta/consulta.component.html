@@ -1,0 +1,54 @@
+<!-- consulta.component.html -->
+<div class="container mt-5">
+    <div class="text-center mb-4">
+      <h2>Datos generales de los usuarios</h2>
+    </div>
+  
+    <!-- Filtros -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="tipoUsuarioFilter" class="form-label">Filtrar por Tipo de Usuario:</label>
+        <select id="tipoUsuarioFilter" class="form-select" [(ngModel)]="tipoUsuarioFilter">
+          <option value="">Todos</option>
+          <option value="Consulta">Consulta</option>
+          <option value="Administrador">Administrador</option>
+          <option value="Basico">Basico</option>
+          <!-- Agrega más opciones según tus tipos de usuario -->
+        </select>
+      </div>
+  
+      <div class="col-md-4">
+        <label for="nombreCompletoSearch" class="form-label">Buscar por Nombre Completo:</label>
+        <input type="text" id="nombreCompletoSearch" class="form-control" [(ngModel)]="nombreCompletoSearch" />
+      </div>
+
+      <div class="col-md-4">
+        <label for="nombreUsuarioSearch" class="form-label">Buscar por Nombre de Usuario:</label>
+        <input type="text" id="nombreUsuarioSearch" class="form-control" [(ngModel)]="nombreUsuarioSearch" />
+      </div>
+    </div>
+  
+    <!-- Tabla -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre de Usuario</th>
+            <th>Nombre Completo</th>
+            <th>Tipo de Usuario</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of usuariosConsulta | filterUsuarios: tipoUsuarioFilter: nombreUsuarioSearch: nombreCompletoSearch">
+            <td>{{ user.ID }}</td>
+            <td>{{ user.NombreUsuario }}</td>
+            <td>{{ user.NombreCompleto }}</td>
+            <td>{{ user.TipoUsuario }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="btn btn-danger" (click)="logout()">Cerrar Sesión</button>
+  </div>
+  

@@ -1,0 +1,304 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Control de Usuarios</h2>
+                    <form [formGroup]="usuariosForm" (ngSubmit)="onSubmit()">
+                        <div class="mb-3">
+                            <label for="nombreUsuario" class="form-label">Nombre
+                                de Usuario:</label>
+                            <input type="text" class="form-control"
+                                id="nombreUsuario"
+                                formControlName="nombreUsuario"
+                                placeholder="Introduce tu nombre de usuario (no nombre)">
+
+                            <div
+                                *ngIf="usuariosForm.controls['nombreUsuario'].touched && usuariosForm.controls['nombreUsuario'].errors">
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['nombreUsuario'].errors['required']">
+                                    El nombre de usuario es requerido.
+                                </small>
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['nombreUsuario'].errors['pattern']">
+                                    El nombre de usuario solo puede contener
+                                    letras y números.
+                                </small>
+                            </div>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombreCompleto" class="form-label">Nombre
+                                Completo:</label>
+                            <input type="text" class="form-control"
+                                id="nombreCompleto"
+                                formControlName="nombreCompleto"
+                                placeholder="Introduce tu nombre completo">
+
+                            <div
+                                *ngIf="usuariosForm.controls['nombreCompleto'].touched && usuariosForm.controls['nombreCompleto'].errors">
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['nombreCompleto'].errors['required']">
+                                    El nombre completo es requerido.
+                                </small>
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['nombreCompleto'].errors['pattern']">
+                                    El nombre completo solo puede contener
+                                    letras y espacios.
+                                </small>
+                            </div>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="contrasena" class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control"
+                                id="contrasena" formControlName="claveUsuario"
+                                placeholder="Introducir contraseña">
+                            <div
+                                *ngIf="usuariosForm.controls['claveUsuario'].touched && usuariosForm.controls['claveUsuario'].errors">
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['claveUsuario'].errors['required']">
+                                    La contraseña es requerida.
+                                </small>
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['claveUsuario'].errors['minlength']">
+                                    La contraseña debe tener al menos 6
+                                    caracteres.
+                                </small>
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['claveUsuario'].errors['pattern']">
+                                    La contraseña debe contener al menos una
+                                    mayúscula, un número y un carácter especial
+                                    (/*#$%_).
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tipoUsuario" class="form-label">Tipo de
+                                Usuario:</label>
+                            <select class="form-select" id="tipoUsuario"
+                                formControlName="tipoUsuario">
+                                <option value disabled>Seleccionar Tipo</option>
+                                <option value="Basico">Básico</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Consulta">Consulta</option>
+                            </select>
+                            <div
+                                *ngIf="usuariosForm.controls['tipoUsuario'].touched && usuariosForm.controls['tipoUsuario'].errors">
+                                <small class="text-danger"
+                                    *ngIf="usuariosForm.controls['tipoUsuario'].errors['required']">
+                                    El tipo de usuario es requerido.
+                                </small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"
+                            [disabled]="!usuariosForm.valid">Registrar</button>
+                    </form>
+
+                    <div class="table-responsive mt-4">
+                        <div class="row mb-3">
+                            <!-- Filtro por Nombre de Usuario -->
+                            <div class="col-md-4">
+                                <label for="filtroNombreUsuario"
+                                    class="form-label">Filtrar por Nombre de
+                                    Usuario:</label>
+                                <input type="text" class="form-control"
+                                    id="filtroNombreUsuario"
+                                    [(ngModel)]="filtroNombreUsuario"
+                                    (ngModelChange)="cargarUsuarios()"
+                                    placeholder="Filtrar...">
+                            </div>
+
+                            <!-- Filtro por Nombre Completo -->
+                            <div class="col-md-4">
+                                <label for="nombreCompletoSearch"
+                                    class="form-label">Buscar por Nombre
+                                    Completo:</label>
+                                <input type="text" id="nombreCompletoSearch"
+                                    class="form-control"
+                                    [(ngModel)]="filtroNombreCompleto"
+                                    (ngModelChange)="cargarUsuarios()"
+                                    placeholder="Filtrar..." />
+                            </div>
+
+                            <!-- Filtro por Tipo de Usuario -->
+                            <div class="col-md-4">
+                                <label for="tipoUsuarioFilter"
+                                    class="form-label"> Buscar pot Tipo de
+                                    Usuario:</label>
+                                <select id="tipoUsuarioFilter"
+                                    class="form-select"
+                                    [(ngModel)]="filtroTipoUsuario"
+                                    (ngModelChange)="cargarUsuarios()">
+                                    <option value>Todos</option>
+                                    <option value="Consulta">Consulta</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Basico">Basico</option>
+                                    <!-- Más opciones según tus tipos de usuario -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">ID Usuario</th>
+                                    <th scope="col">Nombre de Usuario</th>
+                                    <th scope="col">Clave</th>
+                                    <th scope="col">Nombre Completo</th>
+                                    <th scope="col">Tipo de Usuario</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+
+                                <tbody
+                                    *ngIf="usuarios.length > 0; else sinUsuariosTemplate">
+                                    <tr
+                                        *ngFor="let usuario of usuarios | filterUsuarios : filtroTipoUsuario : filtroNombreUsuario : filtroNombreCompleto">
+                                        <td>{{ usuario.ID }}</td>
+                                        <!-- Nombre de Usuario -->
+                                        <td>
+                                            <div
+                                                *ngIf="usuarioEditandoId === usuario.ID; else viewNombreUsuario">
+                                                <input type="text"
+                                                    [(ngModel)]="usuario.NombreUsuario"
+                                                    class="form-control"
+                                                    [ngClass]="{ 'is-invalid': usuariosForm.get('nombreUsuario')?.invalid && usuariosForm.get('nombreUsuario')?.touched }">
+                                                <div
+                                                    *ngIf="usuariosForm.get('nombreUsuario')?.invalid && usuariosForm.get('nombreUsuario')?.touched"
+                                                    class="invalid-feedback">
+                                                    <small
+                                                        *ngIf="usuariosForm.get('nombreUsuario')?.hasError('required')">El
+                                                        nombre de usuario es
+                                                        requerido.</small>
+                                                    <small
+                                                        *ngIf="usuariosForm.get('nombreUsuario')?.hasError('pattern')">El
+                                                        nombre de usuario solo
+                                                        puede contener letras y
+                                                        números.</small>
+                                                </div>
+                                            </div>
+                                            <ng-template #viewNombreUsuario>{{
+                                                usuario.NombreUsuario }}</ng-template>
+                                        </td>
+
+                                        <!-- Clave de Usuario -->
+                                        <td>
+                                            <div
+                                                *ngIf="usuarioEditandoId === usuario.ID; else viewClaveUsuario">
+                                                <input type="text"
+                                                    [(ngModel)]="usuario.ClaveUsuario"
+                                                    class="form-control"
+                                                    [ngClass]="{ 'is-invalid': usuariosForm.get('claveUsuario')?.invalid && usuariosForm.get('claveUsuario')?.touched }">
+                                                <div
+                                                    *ngIf="usuariosForm.get('claveUsuario')?.invalid && usuariosForm.get('claveUsuario')?.touched"
+                                                    class="invalid-feedback">
+                                                    <small
+                                                        *ngIf="usuariosForm.get('claveUsuario')?.hasError('required')">La
+                                                        contraseña es requerida.</small>
+                                                    <small
+                                                        *ngIf="usuariosForm.get('claveUsuario')?.hasError('minlength')">La
+                                                        contraseña debe tener al
+                                                        menos 6 caracteres.</small>
+                                                    <small
+                                                        *ngIf="usuariosForm.get('claveUsuario')?.hasError('pattern')">La
+                                                        contraseña debe contener
+                                                        al menos una mayúscula,
+                                                        un número y un carácter
+                                                        especial (/*#$%_).</small>
+                                                </div>
+                                            </div>
+                                            <ng-template #viewClaveUsuario>{{
+                                                usuario.ClaveUsuario }}</ng-template>
+                                        </td>
+
+                                        <!-- Nombre Completo -->
+                                        <td>
+                                            <div
+                                                *ngIf="usuarioEditandoId === usuario.ID; else viewNombreCompleto">
+                                                <input type="text"
+                                                    [(ngModel)]="usuario.NombreCompleto"
+                                                    class="form-control"
+                                                    [ngClass]="{ 'is-invalid': usuariosForm.get('nombreCompleto')?.invalid && usuariosForm.get('nombreCompleto')?.touched }">
+                                                <div
+                                                    *ngIf="usuariosForm.get('nombreCompleto')?.invalid && usuariosForm.get('nombreCompleto')?.touched"
+                                                    class="invalid-feedback">
+                                                    <small
+                                                        *ngIf="usuariosForm.get('nombreCompleto')?.hasError('required')">El
+                                                        nombre completo es
+                                                        requerido.</small>
+                                                    <small
+                                                        *ngIf="usuariosForm.get('nombreCompleto')?.hasError('pattern')">El
+                                                        nombre completo solo
+                                                        puede contener letras y
+                                                        espacios.</small>
+                                                </div>
+                                            </div>
+                                            <ng-template #viewNombreCompleto>{{
+                                                usuario.NombreCompleto }}</ng-template>
+                                        </td>
+
+                                        <!-- Tipo de Usuario -->
+                                        <td>
+                                            <div
+                                                *ngIf="usuarioEditandoId === usuario.ID; else viewTipoUsuario">
+                                                <select
+                                                    [(ngModel)]="usuario.TipoUsuario"
+                                                    class="form-select"
+                                                    [ngClass]="{ 'is-invalid': usuariosForm.get('tipoUsuario')?.invalid && usuariosForm.get('tipoUsuario')?.touched }">
+                                                    <option value="Basico">Básico</option>
+                                                    <option
+                                                        value="Administrador">Administrador</option>
+                                                    <option value="Consulta">Consulta</option>
+                                                </select>
+                                                <div
+                                                    *ngIf="usuariosForm.get('tipoUsuario')?.invalid && usuariosForm.get('tipoUsuario')?.touched"
+                                                    class="invalid-feedback">
+                                                    <small
+                                                        *ngIf="usuariosForm.get('tipoUsuario')?.hasError('required')">El
+                                                        tipo de usuario es
+                                                        requerido.</small>
+                                                </div>
+                                            </div>
+                                            <ng-template #viewTipoUsuario>{{
+                                                usuario.TipoUsuario }}</ng-template>
+                                        </td>
+                                        <td
+                                            class="d-flex justify-content-center">
+                                            <div
+                                                *ngIf="usuarioEditandoId === usuario.ID">
+                                                <button
+                                                    class="btn btn-success btn-sm me-2"
+                                                    (click)="guardarUsuario(usuario)">Guardar</button>
+                                                <button
+                                                    class="btn btn-secondary btn-sm"
+                                                    (click)="cancelarEdicion()">Cancelar</button>
+                                            </div>
+                                            <div
+                                                *ngIf="usuarioEditandoId !== usuario.ID">
+                                                <button
+                                                    class="btn btn-warning btn-sm me-2"
+                                                    (click)="modificarUsuario(usuario)">Modificar</button>
+                                                <button
+                                                    class="btn btn-danger btn-sm"
+                                                    (click)="eliminarUsuario(usuario.NombreUsuario)">Eliminar</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <ng-template #sinUsuariosTemplate>
+                                    <tr>
+                                        <td colspan="6" class="text-center">No
+                                            se encontraron usuarios</td>
+                                    </tr>
+                                </ng-template>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4"><button
+                                class="btn btn-danger me-2" (click)="logout()">Cerrar
+                                Sesión</button></div>
+
+                    </div>
+                </div>
+
+            </div>

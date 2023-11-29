@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <h1 class="text-center mb-4">Visualizador de datos</h1>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-4">
+          <div class="mb-3">
+            <label for="id" class="form-label">ID:</label>
+            <input type="text" id="id" class="form-control" formControlName="id" readonly />
+          </div>
+  
+          <div class="mb-3">
+            <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+            <input type="text" id="nombreUsuario" class="form-control" formControlName="nombreUsuario" />
+            <div *ngIf="form.get('nombreUsuario')?.invalid && (form.get('nombreUsuario')?.dirty || form.get('nombreUsuario')?.touched)" class="text-danger">
+              {{ getErrorMessage('nombreUsuario') }}
+            </div>
+          </div>
+  
+          <div class="mb-3">
+            <label for="claveUsuario" class="form-label">Clave de Usuario:</label>
+            <input type="password" id="claveUsuario" class="form-control" formControlName="claveUsuario" />
+            <div *ngIf="form.get('claveUsuario')?.invalid && (form.get('claveUsuario')?.dirty || form.get('claveUsuario')?.touched)" class="text-danger">
+              {{ getErrorMessage('claveUsuario') }}
+            </div>
+          </div>
+  
+          <div class="mb-3">
+            <label for="confirmarClave" class="form-label">Confirmar Clave de Usuario:</label>
+            <input type="password" id="confirmarClave" class="form-control" formControlName="confirmarClave" />
+            <div *ngIf="form.get('confirmarClave')?.invalid && (form.get('confirmarClave')?.dirty || form.get('confirmarClave')?.touched)" class="text-danger">
+              {{ getErrorMessage('confirmarClave') }}
+            </div>
+          </div>
+  
+          <div class="mb-3">
+            <label for="nombreCompleto" class="form-label">Nombre Completo:</label>
+            <input type="text" id="nombreCompleto" class="form-control" formControlName="nombreCompleto" readonly />
+          </div>
+  
+          <div class="mb-3">
+            <label for="tipoUsuario" class="form-label">Tipo de Usuario:</label>
+            <input type="text" id="tipoUsuario" class="form-control" formControlName="tipoUsuario" readonly />
+          </div>
+  
+          <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-danger me-2" (click)="logout()">Cerrar Sesión</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
